@@ -1,231 +1,591 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ScriptsForExe.gg | Largest Roblox Script Index</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #0b0f19;
-            --sidebar-bg: #07090e;
-            --surface: #121826;
-            --primary: #38bdf8;
-            --success: #22c55e;
-            --warning: #f59e0b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: rgba(255, 255, 255, 0.08);
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); display: flex; min-height: 100vh; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScriptForExe.net — Community Script Repository</title>
+  <style>
+    :root {
+      --bg-primary: #0b0e14;
+      --bg-secondary: #151923;
+      --bg-card: #1c212e;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f3f4f6;
+      --text-secondary: #9ca3af;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --discord: #5865F2;
+      --discord-hover: #4752C4;
+      --danger: #ef4444;
+      --success: #22c55e;
+    }
 
-        /* Sidebar Navigation */
-        aside { width: 260px; background: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; position: fixed; height: 100vh; padding: 25px 20px; z-index: 1000; }
-        .logo { font-size: 1.4rem; font-weight: 800; color: #fff; text-decoration: none; margin-bottom: 30px; display: block; }
-        .logo img { height: 32px; width: auto; display: block; }
-        .sidebar-menu { display: flex; flex-direction: column; gap: 8px; list-style: none; }
-        .sidebar-menu a { color: var(--text-muted); text-decoration: none; padding: 10px 14px; border-radius: 10px; font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; gap: 12px; transition: 0.2s; cursor: pointer; }
-        .sidebar-menu a:hover, .sidebar-menu a.active { background: rgba(56, 189, 248, 0.1); color: var(--primary); }
-        
-        .sidebar-account { border-top: 1px solid var(--border); padding-top: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .sidebar-btn { background: var(--primary); color: #0b0f19; text-align: center; padding: 10px; border-radius: 12px; font-weight: 800; text-decoration: none; display: block; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        /* Main Content Area */
-        main { margin-left: 260px; flex: 1; display: flex; flex-direction: column; padding: 25px 40px; }
-        
-        /* Top Navigation Header */
-        .top-header { display: flex; justify-content: flex-end; align-items: center; gap: 15px; margin-bottom: 30px; }
-        .search-box { flex: 1; max-width: 500px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 10px 16px; display: flex; align-items: center; }
-        .search-box input { flex: 1; background: transparent; border: none; color: #fff; font-size: 0.95rem; outline: none; }
-        
-        /* Typing Hero Title Styles */
-        .hero-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 30px; letter-spacing: -0.5px; min-height: 2.8rem; }
-        .typed-cursor { font-weight: 400; color: var(--primary); animation: blink 0.7s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-        /* Sections */
-        .section-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-bottom: 40px; }
-        
-        .script-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: 0.2s; position: relative; }
-        .script-card:hover { transform: translateY(-3px); border-color: rgba(56,189,248,0.4); }
-        .script-img-wrapper { position: relative; width: 100%; height: 130px; background: #1e293b; }
-        .script-img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .key-badge { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); padding: 3px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; gap: 4px; border: 1px solid var(--border); }
-        
-        .script-body { padding: 12px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .script-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
-        .script-desc { font-size: 0.8rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 10px; }
-        .script-meta { font-size: 0.75rem; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 8px; }
+    /* Navbar */
+    nav {
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-        .user-pill { display: flex; align-items: center; gap: 8px; background: var(--surface); padding: 6px 14px; border-radius: 30px; border: 1px solid var(--border); cursor: pointer; }
-        .user-pill img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
-    </style>
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .brand {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.55rem 1.1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-discord {
+      background-color: var(--discord);
+      color: #fff;
+    }
+
+    .btn-discord:hover {
+      background-color: var(--discord-hover);
+    }
+
+    .btn-primary {
+      background-color: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-hover);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .btn-outline:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-danger {
+      background-color: rgba(239, 68, 68, 0.15);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 0.35rem 0.7rem;
+      font-size: 0.8rem;
+    }
+
+    .btn-danger:hover {
+      background-color: var(--danger);
+      color: #fff;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border-color);
+    }
+
+    .admin-badge {
+      background-color: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    /* Main Content */
+    main {
+      max-width: 1200px;
+      width: 100%;
+      margin: 2rem auto;
+      padding: 0 2rem;
+      flex: 1;
+    }
+
+    .header-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .search-bar {
+      flex: 1;
+      min-width: 260px;
+      max-width: 450px;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+    }
+
+    .search-bar input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    /* Scripts Grid */
+    .scripts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .script-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .card-game {
+      font-size: 0.8rem;
+      background-color: rgba(255, 255, 255, 0.06);
+      color: var(--text-secondary);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .card-desc {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .code-preview {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.75rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.8rem;
+      color: #a5b4fc;
+      overflow-x: auto;
+      white-space: pre;
+      max-height: 90px;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.75);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      z-index: 200;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      width: 100%;
+      max-width: 520px;
+      padding: 1.75rem;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.65rem;
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+
+    .form-group textarea {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--text-secondary);
+      grid-column: 1 / -1;
+    }
+  </style>
 </head>
 <body>
 
-    <!-- Sidebar -->
-    <aside>
-        <div>
-            <a href="/" class="logo">
-                <img src="/logo.png" alt="ScriptsForExe.gg" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
-                <span style="display:none;">ScriptsForExe<span style="color: var(--primary);">.gg</span></span>
-            </a>
-            <ul class="sidebar-menu">
-                <li><a href="/" class="active"> Home</a></li>
-                <li><a onclick="checkAuth('/upload.html')"> Upload Script</a></li>
-                <li><a onclick="checkAuth('/profile.html')"> Profile</a></li>
-                <li><a onclick="checkAuth('/settings.html')"> Settings</a></li>
-                <li id="admin-sidebar" style="display:none;"><a href="/admin.html"> Admin Panel</a></li>
-            </ul>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="brand">ScriptFor<span>Exe</span>.net</a>
+      <div class="nav-actions" id="authSection">
+        <a href="/auth/discord" class="btn btn-discord">Login with Discord</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    <div class="header-controls">
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search scripts by title, game, or author..." />
+      </div>
+      <button class="btn btn-primary" id="openUploadBtn" style="display: none;">+ Upload Script</button>
+    </div>
+
+    <div class="scripts-grid" id="scriptsGrid">
+      <div class="empty-state">Loading scripts...</div>
+    </div>
+  </main>
+
+  <!-- Upload Modal -->
+  <div class="modal-backdrop" id="uploadModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Publish New Script</h2>
+        <button class="btn btn-outline" id="closeModalBtn" style="padding: 0.3rem 0.6rem;">✕</button>
+      </div>
+      <form id="uploadForm">
+        <div class="form-group">
+          <label for="scriptTitle">Script Title</label>
+          <input type="text" id="scriptTitle" required placeholder="e.g., Auto Farm Hub v2" />
         </div>
-        <div class="sidebar-account" id="sidebarAuth">
-            <a href="/auth/discord" class="sidebar-btn"> Login with Discord</a>
+        <div class="form-group">
+          <label for="scriptGame">Target Game / Category</label>
+          <input type="text" id="scriptGame" required placeholder="e.g., Universal / Roblox" />
         </div>
-    </aside>
-    <footer style="margin-top: 4rem; padding: 1.5rem 1rem; border-top: 1px solid rgba(255, 255, 255, 0.1); text-align: center; font-family: system-ui, -apple-system, sans-serif; font-size: 0.9rem; color: #9ca3af;">
-  <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: center; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
-    <span>&copy; 2026 ScriptForExe.net</span>
-    <span style="opacity: 0.4;">•</span>
-    <a href="https://scriptsforexe-net.betteruptime.com/" target="_blank" rel="noopener noreferrer" style="color: #e5e7eb; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: color 0.2s;" onmouseover="this.style.color='#60a5fa'" onmouseout="this.style.color='#e5e7eb'">
-      <span style="width: 8px; height: 8px; background-color: #22c55e; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #22c55e;"></span>
-      System Status
-    </a>
+        <div class="form-group">
+          <label for="scriptDesc">Short Description</label>
+          <input type="text" id="scriptDesc" required placeholder="Brief summary of features..." />
+        </div>
+        <div class="form-group">
+          <label for="scriptCode">Script Code / Loadstring</label>
+          <textarea id="scriptCode" required placeholder='loadstring(game:HttpGet("..."))()'></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem;">
+          <button type="button" class="btn btn-outline" id="cancelUploadBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Publish Script</button>
+        </div>
+      </form>
+    </div>
   </div>
-</footer>
 
-    <!-- Main Section -->
-    <main>
-        <div class="top-header">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search scripts, games, executors..." oninput="filterScripts()">
+  <!-- Footer with Better Uptime Status Link -->
+  <footer style="margin-top: 4rem; padding: 1.5rem 1rem; border-top: 1px solid rgba(255, 255, 255, 0.1); text-align: center; font-family: system-ui, -apple-system, sans-serif; font-size: 0.9rem; color: #9ca3af;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: center; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+      <span>&copy; 2026 ScriptForExe.net</span>
+      <span style="opacity: 0.4;">•</span>
+      <a href="https://scriptsforexe-net.betteruptime.com/" target="_blank" rel="noopener noreferrer" style="color: #e5e7eb; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: color 0.2s;" onmouseover="this.style.color='#60a5fa'" onmouseout="this.style.color='#e5e7eb'">
+        <span style="width: 8px; height: 8px; background-color: #22c55e; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #22c55e;"></span>
+        System Status
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    const ADMIN_ID = '1287363175158644757';
+    let currentUser = null;
+    let allScripts = [];
+
+    const authSection = document.getElementById('authSection');
+    const openUploadBtn = document.getElementById('openUploadBtn');
+    const scriptsGrid = document.getElementById('scriptsGrid');
+    const searchInput = document.getElementById('searchInput');
+    const uploadModal = document.getElementById('uploadModal');
+    const uploadForm = document.getElementById('uploadForm');
+
+    // Escape HTML to prevent XSS
+    function escapeHTML(str) {
+      if (!str) return '';
+      return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[tag]));
+    }
+
+    // Check authenticated user session
+    async function fetchUser() {
+      try {
+        const res = await fetch('/api/user');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.id) {
+            currentUser = data;
+            const isAdmin = currentUser.id === ADMIN_ID;
+            const avatarUrl = currentUser.avatar
+              ? `https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png`
+              : 'https://cdn.discordapp.com/embed/avatars/0.png';
+
+            authSection.innerHTML = `
+              <div class="user-profile">
+                <img src="${avatarUrl}" alt="Avatar" class="user-avatar" />
+                <span>${escapeHTML(currentUser.username)}</span>
+                ${isAdmin ? '<span class="admin-badge">Admin</span>' : ''}
+                <a href="/auth/logout" class="btn btn-outline" style="padding: 0.4rem 0.8rem;">Logout</a>
+              </div>
+            `;
+            openUploadBtn.style.display = 'inline-flex';
+          }
+        }
+      } catch (err) {
+        console.error('Auth check failed:', err);
+      }
+    }
+
+    // Load scripts from backend API
+    async function fetchScripts() {
+      try {
+        const res = await fetch('/api/scripts');
+        allScripts = await res.json();
+        renderScripts(allScripts);
+      } catch (err) {
+        scriptsGrid.innerHTML = '<div class="empty-state">Failed to load scripts. Please refresh the page.</div>';
+      }
+    }
+
+    // Render script cards
+    function renderScripts(scripts) {
+      if (!scripts || scripts.length === 0) {
+        scriptsGrid.innerHTML = '<div class="empty-state">No scripts found. Be the first to upload one!</div>';
+        return;
+      }
+
+      scriptsGrid.innerHTML = scripts.map(script => {
+        const canDelete = currentUser && (currentUser.id === ADMIN_ID || currentUser.id === script.authorId);
+        return `
+          <div class="script-card">
+            <div>
+              <div class="card-header">
+                <div class="card-title">${escapeHTML(script.title)}</div>
+                <span class="card-game">${escapeHTML(script.game || 'Universal')}</span>
+              </div>
+              <p class="card-desc" style="margin-top: 0.5rem;">${escapeHTML(script.description)}</p>
             </div>
-            <div id="topAuthRight"></div>
-        </div>
 
-        <h1 class="hero-title"><span id="typedText"></span><span class="typed-cursor">|</span></h1>
+            <div class="code-preview">${escapeHTML(script.code)}</div>
 
-        <div class="section-title">Newest</div>
-        <div id="newestGrid" class="grid"><p style="color:var(--text-muted);">Loading scripts...</p></div>
-    </main>
+            <div class="card-footer">
+              <span>By <strong>${escapeHTML(script.author || 'Anonymous')}</strong></span>
+              <div class="card-actions">
+                <button class="btn btn-primary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;" onclick="copyScript(this, '${encodeURIComponent(script.code)}')">Copy</button>
+                ${canDelete ? `<button class="btn btn-danger" onclick="deleteScript('${script.id}')">Delete</button>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
 
-    <script>
-        // Typing Effect Script
-        const words = [
-            "Largest Roblox Script Index and Executors with Daily Updates",
-            "Find the Best Community Verified Scripts & Hubs",
-            "Find the Best Trending Scripts",
-            "Secure Key System & Fast Script Execution"
-        ];
-        let i = 0;
-        let timer;
+    // Copy script to clipboard
+    window.copyScript = function(btn, encodedCode) {
+      const code = decodeURIComponent(encodedCode);
+      navigator.clipboard.writeText(code).then(() => {
+        const originalText = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.style.backgroundColor = 'var(--success)';
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.backgroundColor = '';
+        }, 1500);
+      });
+    };
 
-        function typingEffect() {
-            let word = words[i];
-            let j = 0;
-            let target = document.getElementById("typedText");
-
-            function type() {
-                if (j < word.length) {
-                    target.innerHTML += word.charAt(j);
-                    j++;
-                    setTimeout(type, 45);
-                } else {
-                    // Stay for 2 seconds before deleting
-                    setTimeout(erase, 2000);
-                }
-            }
-
-            function erase() {
-                if (j > 0) {
-                    target.innerHTML = word.substring(0, j - 1);
-                    j--;
-                    setTimeout(erase, 25);
-                } else {
-                    i = (i + 1) % words.length;
-                    setTimeout(typingEffect, 300);
-                }
-            }
-
-            type();
+    // Delete script (Admin or Author)
+    window.deleteScript = async function(id) {
+      if (!confirm('Are you sure you want to delete this script?')) return;
+      try {
+        const res = await fetch(`/api/scripts/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          allScripts = allScripts.filter(s => s.id !== id);
+          renderScripts(allScripts);
+        } else {
+          alert('Failed to delete script.');
         }
+      } catch (err) {
+        alert('Error deleting script.');
+      }
+    };
 
-        typingEffect();
+    // Search filter
+    searchInput.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      const filtered = allScripts.filter(s =>
+        (s.title && s.title.toLowerCase().includes(q)) ||
+        (s.game && s.game.toLowerCase().includes(q)) ||
+        (s.author && s.author.toLowerCase().includes(q)) ||
+        (s.description && s.description.toLowerCase().includes(q))
+      );
+      renderScripts(filtered);
+    });
 
-        let globalScripts = [];
+    // Modal controls
+    openUploadBtn.addEventListener('click', () => uploadModal.classList.add('active'));
+    document.getElementById('closeModalBtn').addEventListener('click', () => uploadModal.classList.remove('active'));
+    document.getElementById('cancelUploadBtn').addEventListener('click', () => uploadModal.classList.remove('active'));
 
-        async function checkAuth(destination) {
-            const res = await fetch('/api/me');
-            const data = await res.json();
-            if (data.authenticated) window.location.href = destination;
-            else { alert('Please log in with Discord first.'); window.location.href = '/auth/discord'; }
+    // Submit new script
+    uploadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        title: document.getElementById('scriptTitle').value.trim(),
+        game: document.getElementById('scriptGame').value.trim(),
+        description: document.getElementById('scriptDesc').value.trim(),
+        code: document.getElementById('scriptCode').value.trim()
+      };
+
+      try {
+        const res = await fetch('/api/scripts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          uploadForm.reset();
+          uploadModal.classList.remove('active');
+          await fetchScripts();
+        } else {
+          alert('Failed to publish script. Make sure you are logged in.');
         }
+      } catch (err) {
+        alert('Error submitting script.');
+      }
+    });
 
-        async function init() {
-            try {
-                const meRes = await fetch('/api/me');
-                const meData = await meRes.json();
-                if (meData.authenticated && meData.user.username && meData.user.username !== 'undefined') {
-                    const userHtml = `
-                        <div class="user-pill" onclick="window.location.href='/profile.html'">
-                            <img src="${meData.user.avatar}" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
-                            <span style="font-weight:700; font-size:0.85rem;">${meData.user.username}</span>
-                        </div>
-                    `;
-                    document.getElementById('sidebarAuth').innerHTML = `<a href="/logout" style="color:#ef4444; text-decoration:none; font-weight:700; text-align:center;"> Log Out</a>`;
-                    document.getElementById('topAuthRight').innerHTML = userHtml;
-                }
-
-                const adminRes = await fetch('/api/admin/check');
-                const adminData = await adminRes.json();
-                if (adminData.admin) document.getElementById('admin-sidebar').style.display = 'block';
-
-                const res = await fetch('/api/scripts');
-                globalScripts = await res.json();
-                renderFeeds(globalScripts);
-            } catch (err) { console.error(err); }
-        }
-
-        function renderFeeds(scripts) {
-            const newestGrid = document.getElementById('newestGrid');
-            newestGrid.innerHTML = '';
-
-            if (scripts.length === 0) {
-                newestGrid.innerHTML = '<p style="color:var(--text-muted);">No scripts uploaded yet.</p>';
-                return;
-            }
-
-            scripts.forEach(s => {
-                const cardHtml = `
-                    <div class="script-card" onclick="window.location.href='/page.html?id=${s.id}'">
-                        <div class="script-img-wrapper">
-                            <div class="key-badge">${s.hasKeySystem ? '🔑 Key System' : '🔓 No Key'}</div>
-                            <img src="${s.image}" class="script-img">
-                        </div>
-                        <div class="script-body">
-                            <div>
-                                <h3 class="script-title">${s.title}</h3>
-                                <p class="script-desc">${s.description}</p>
-                            </div>
-                            <div class="script-meta">
-                                <span>👁️ ${s.views || 0} &nbsp; ❤️ ${s.likes ? s.likes.length : 0}</span>
-                                <span>by ${s.author?.username || 'Unknown'}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                newestGrid.innerHTML += cardHtml;
-            });
-        }
-
-        function filterScripts() {
-            const q = document.getElementById('searchInput').value.toLowerCase();
-            renderFeeds(globalScripts.filter(s => s.title.toLowerCase().includes(q) || s.description.toLowerCase().includes(q)));
-        }
-
-        init();
-    </script>
+    // Initialize
+    (async () => {
+      await fetchUser();
+      await fetchScripts();
+    })();
+  </script>
 </body>
 </html>
